@@ -1,16 +1,37 @@
 require('dotenv').config();
 const { google } = require('googleapis');
 const path = require('path');
+const fs = require('fs');
 
-const GOOGLE_CREDENTIALS = path.join(process.cwd(), 'service-account-key.json');
 const SHEET_ID = process.env.SHEET_ID;
-
 let sheets = null;
 
 async function initializeSheets() {
   if (!sheets) {
+    let credentials;
+
+    // 방법 1: 환경 변수에서 JSON 직접 읽기 (Vercel)
+    if (process.env.GOOGLE_CREDENTIALS) {
+      credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+    }
+    // 방법 2: 환경 변수에서 Base64 디코딩 (Vercel)
+    else if (process.env.GOOGLE_CREDENTIALS_BASE64) {
+      const decoded = Buffer.from(process.env.GOOGLE_CREDENTIALS_BASE64, 'base64').toString('utf-8');
+      credentials = JSON.parse(decoded);
+    }
+    // 방법 3: 파일에서 읽기 (로컬)
+    else {
+      const credPath = path.join(process.cwd(), 'service-account-key.json');
+      if (fs.existsSync(credPath)) {
+        const credFile = fs.readFileSync(credPath, 'utf-8');
+        credentials = JSON.parse(credFile);
+      } else {
+        throw new Error('서비스 계정 인증 정보를 찾을 수 없습니다. GOOGLE_CREDENTIALS 환경 변수를 설정하세요.');
+      }
+    }
+
     const auth = new google.auth.GoogleAuth({
-      keyFile: GOOGLE_CREDENTIALS,
+      credentials: credentials,
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
     sheets = google.sheets({ version: 'v4', auth });
