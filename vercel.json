@@ -1,23 +1,21 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
-    }
-  ],
+  "public": false,
+  "buildCommand": "npm install",
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "server.js"
-    },
-    {
-      "src": "/",
-      "dest": "main.html"
+      "dest": "/api/$1.js"
     },
     {
       "src": "/(.*)",
-      "dest": "main.html"
+      "dest": "/public/$1"
     }
-  ]
+  ],
+  "functions": {
+    "api/reserve.js": {
+      "memory": 1024,
+      "maxDuration": 30
+    }
+  }
 }
