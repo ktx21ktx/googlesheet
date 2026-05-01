@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#f9f9f9",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#eeeeee",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#7e7576",
+                        "surface-tint": "#5e5e5e",
+                        "on-primary-container": "#848484",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-surface": "#1a1c1c",
+                        "inverse-on-surface": "#f0f1f1",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#474747",
+                        "on-primary-fixed": "#1b1b1b",
+                        "secondary-container": "#e0dfdf",
+                        "on-secondary-container": "#626363",
+                        "on-error-container": "#93000a",
+                        "primary": "#000000",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "secondary": "#5e5e5f",
+                        "primary-fixed": "#e2e2e2",
+                        "on-background": "#1a1c1c",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "surface-container-low": "#f3f3f4",
+                        "on-tertiary-container": "#838484",
+                        "primary-fixed-dim": "#c6c6c6",
+                        "secondary-fixed": "#e3e2e2",
+                        "tertiary-container": "#1a1c1c",
+                        "surface-dim": "#dadada",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "surface-container-high": "#e8e8e8",
+                        "inverse-primary": "#c6c6c6",
+                        "outline-variant": "#cfc4c5",
+                        "surface-variant": "#e2e2e2",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#1b1b1b",
+                        "surface-bright": "#f9f9f9",
+                        "on-primary": "#ffffff",
+                        "on-surface-variant": "#4c4546",
+                        "background": "#f9f9f9",
+                        "surface-container-highest": "#e2e2e2",
+                        "tertiary": "#000000",
+                        "on-secondary-fixed-variant": "#464747",
+                        "tertiary-fixed": "#e2e2e2",
+                        "inverse-surface": "#2f3131"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "stack-md": "16px",
+                        "section-gap": "120px",
+                        "margin-page": "64px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Noto Serif"],
+                        "headline-md": ["Noto Serif"],
+                        "body-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+                        "headline-md": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "body-md": ["15px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body { background-color: #f9f9f9; }
+        .fade-in { animation: fadeIn 1.2s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-neutral-200 flex justify-between items-center px-8 md:px-16 py-6 transition-all duration-500 ease-in-out">
+<div class="flex items-center gap-8">
+<button class="hover:opacity-70 transition-opacity duration-500 text-neutral-900">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="font-serif tracking-widest text-sm text-neutral-950 border-b border-neutral-950" href="#">에센스 리트릿</a>
+<a class="font-serif tracking-widest text-sm text-neutral-500 hover:opacity-70 transition-opacity duration-500" href="#">객실</a>
+<a class="font-serif tracking-widest text-sm text-neutral-500 hover:opacity-70 transition-opacity duration-500" href="#">스파</a>
+</nav>
+</div>
+<div class="font-serif text-2xl tracking-[0.2em] text-neutral-950 absolute left-1/2 -translate-x-1/2">L'ESSENCE</div>
+<button class="font-serif tracking-widest text-sm text-neutral-900 px-6 py-2 border border-neutral-950 hover:bg-neutral-950 hover:text-white transition-all duration-500">예약하기</button>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative h-screen w-full overflow-hidden flex items-center justify-center">
+<img class="absolute inset-0 w-full h-full object-cover grayscale-[20%]" data-alt="A cinematic, wide-angle shot of a minimalist luxury retreat nestled in a serene desert landscape during the golden hour. The architecture features clean, sharp lines and expansive floor-to-ceiling glass walls reflecting the soft orange glow of the setting sun. The surrounding environment is sparse and tranquil, emphasizing the quiet solitude of the location. The overall aesthetic is high-fidelity and sophisticated, utilizing a palette of warm earth tones, deep blacks, and crisp whites to convey a sense of essentialist luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCy6JVlm_Nd_Aafz7w4dlA8Pw5TJegV17gVgUopN--KP6OKRM7GbqQxI8ZvtQEkpe_YJ-4DXIo2HD8rXoF4uPt5EQGwmVEnfNPxuYCmxlSttC9PbY3TYOdVLf1l4TMSwwbbaSS7Wn_x6J6OiDuqtampTUBH9VdA6DhHjNDdELu0y4GFVwRjI5jahTJnIbTNfJwS2b210Chh0ja0K_yZA5L5EkRWuo9KTHfu3QzNAFUjzW6Odwh8zXu2rMGdtbLW22oXtiFm_rLOuF0"/>
+<div class="absolute inset-0 bg-black/20"></div>
+<div class="relative z-10 text-center text-white px-margin-page fade-in">
+<h1 class="font-display-lg text-display-lg mb-stack-md">고요함의 건축학.</h1>
+<p class="font-label-caps text-label-caps tracking-[0.3em]">침묵의 심장에 자리한 개인의 휴식처</p>
+</div>
+<!-- Reservation Form -->
+<div class="absolute bottom-12 left-1/2 -translate-x-1/2 w-full max-w-5xl px-margin-page">
+<div class="bg-white/95 backdrop-blur-sm border border-neutral-200 rounded-lg flex flex-col gap-6 p-8 md:p-10 shadow-lg">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- Name Input -->
+<div class="flex flex-col">
+<label class="font-label-caps text-sm text-neutral-500 mb-3 tracking-wider">이름</label>
+<input type="text" id="userName" class="font-body-lg text-lg text-neutral-900 bg-transparent border-b-2 border-neutral-300 outline-none py-3 px-2 placeholder-neutral-400 focus:border-neutral-950 transition-colors" placeholder="성함을 입력하세요">
+</div>
+<!-- Check-in Date -->
+<div class="flex flex-col">
+<label class="font-label-caps text-sm text-neutral-500 mb-3 tracking-wider">입실일</label>
+<input type="date" id="checkIn" class="font-body-lg text-lg text-neutral-900 bg-transparent border-b-2 border-neutral-300 outline-none py-3 px-2 focus:border-neutral-950 transition-colors" value="2024-10-12">
+</div>
+<!-- Check-out Date -->
+<div class="flex flex-col">
+<label class="font-label-caps text-sm text-neutral-500 mb-3 tracking-wider">퇴실일</label>
+<input type="date" id="checkOut" class="font-body-lg text-lg text-neutral-900 bg-transparent border-b-2 border-neutral-300 outline-none py-3 px-2 focus:border-neutral-950 transition-colors" value="2024-10-18">
+</div>
+<!-- Guests -->
+<div class="flex flex-col">
+<label class="font-label-caps text-sm text-neutral-500 mb-3 tracking-wider">인원수</label>
+<select id="guests" class="font-body-lg text-lg text-neutral-900 bg-transparent border-b-2 border-neutral-300 outline-none py-3 px-2 focus:border-neutral-950 transition-colors cursor-pointer">
+<option value="01 Adult">1명</option>
+<option value="02 Adults" selected>2명</option>
+<option value="03 Adults">3명</option>
+<option value="04 Adults">4명</option>
+<option value="05+ Adults">5명 이상</option>
+</select>
+</div>
+</div>
+<!-- Submit Button -->
+<button id="reserveBtn" class="bg-neutral-950 text-white px-12 py-4 font-label-caps text-base tracking-wider hover:bg-neutral-800 transition-colors rounded-lg mt-4 w-full md:w-auto md:self-end" type="button">
+예약 가능 여부 확인
+</button>
+</div>
+</div>
+<div id="notification" class="fixed top-20 right-8 bg-neutral-950 text-white px-6 py-4 rounded-lg hidden z-40 fade-in"></div>
+</section>
+<!-- Philosophy Section -->
+<section class="py-section-gap px-margin-page max-w-7xl mx-auto flex flex-col md:flex-row gap-gutter items-center">
+<div class="md:w-1/2">
+<h2 class="font-headline-md text-headline-md mb-8">단순함의 철학.</h2>
+<p class="font-body-lg text-body-lg text-secondary leading-relaxed mb-8">
+                    에센스는 단순함의 깊은 아름다움을 추구하는 이들을 위해 정성스럽게 준비된 경험입니다. 모든 선, 그림자, 그리고 재료가 의도적으로 선택되어 깊은 현존감과 회복적인 고요함을 전달합니다.
+                </p>
+<div class="h-[1px] w-24 bg-neutral-950"></div>
+</div>
+<div class="md:w-1/2 flex justify-end">
+<img class="w-full h-[500px] object-cover" data-alt="A minimalist architectural detail of a concrete wall meeting a clear blue sky, captured with high-contrast lighting. The sharp shadow of an unseen overhang creates a geometric dark shape across the light grey textured concrete. The atmosphere is quiet and still, emphasizing the beauty of pure forms and high-end essentialist design. The image is part of a series showcasing the textures and spatial qualities of a modern luxury retreat." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAseYHq_qGjCeKDXaUU4pqXtYWAbpICFkKxxbTPjDvY3_bL10qMxPKe2fZiM0vTm96TeetbApDsYgIsnc0jK1thSrpq66JhT9ghTQqn_f8aZ-tOwBIlnvz7wubqG9ddP3yNL-OnjRLB_bNiIBNHNwHP7wBiyAyPSY_-3XT4w8Z9Mp6jUMjIXzvAKByI22ChmVkuMtwdMdOGK7spdkeQmtZOPvKJfRccn34GA7Fe9yEwmgvxcPUNZpcE_bJabu6YdDxfl-N1r1Vmouo"/>
+</div>
+</section>
+<!-- Featured Stays - Bento Grid Style -->
+<section class="py-section-gap px-margin-page max-w-7xl mx-auto">
+<div class="flex justify-between items-end mb-16">
+<div>
+<span class="font-label-caps text-label-caps text-neutral-400 tracking-widest">엄선된 공간</span>
+<h2 class="font-headline-md text-headline-md mt-2">특별한 객실</h2>
+</div>
+<a class="font-label-caps text-label-caps border-b border-neutral-300 pb-1 hover:border-neutral-950 transition-colors" href="#">모든 객실 보기</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Large Feature Card -->
+<div class="md:col-span-8 group cursor-pointer">
+<div class="overflow-hidden mb-6 aspect-video bg-neutral-100">
+<img class="w-full h-full object-cover grayscale-[30%] group-hover:scale-105 transition-transform duration-1000" data-alt="A breathtaking interior view of a luxury suite featuring a large platform bed with crisp white linens and a charcoal grey textured throw. The room is surrounded by floor-to-ceiling windows that offer an unobstructed view of a misty, forested mountain range. The interior lighting is warm and subtle, coming from hidden recessed strips that highlight the minimalist furniture and natural wood ceiling. The mood is deeply peaceful and sophisticated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxwsm4D-O2uzQvgYYmPUn8J3LuKV5DyvIZ-SKAHWO6V6nMJ_JXh1GxVxuBQCpOjyrmEFc-YosWucmPJqleYxGuJuLE2Lc_O8eO8Ye_1C6Sw-s8kouSRXhKityuAUtVy2CBsf2DezrPF0RzjsmdKh0GOD40w08O3aB-taw7YCwEt57bNW7e9IPAIPoY1pCswYFNff9xLG9qzuYRx0MrLHdOdpgekryu0gAMXhVcdgL0paHwjK2zirSs8ZVEFbSgxduj2NyTAGl2JbA"/>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-md text-2xl mb-1">옵시디안 스위트</h3>
+<p class="font-body-md text-secondary">프라이빗 인피니티풀 · 110㎡ · 산 전망</p>
+</div>
+<span class="font-serif text-xl">₩1,800,000 <span class="text-xs text-neutral-400">/ 1박</span></span>
+</div>
+</div>
+<!-- Small Vertical Card -->
+<div class="md:col-span-4 group cursor-pointer flex flex-col">
+<div class="overflow-hidden mb-6 flex-grow aspect-[3/4] bg-neutral-100">
+<img class="w-full h-full object-cover grayscale-[30%] group-hover:scale-105 transition-transform duration-1000" data-alt="A close-up of a minimalist hotel bathroom with a freestanding black stone bathtub set against a white marble wall. A single, perfectly placed wooden stool holds a rolled white towel and a single sprig of dried eucalyptus. Soft, natural light spills from a narrow skylight above, creating a serene, spa-like atmosphere that emphasizes material texture and pure white space. The style is modern, quiet, and exceptionally high-end." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB395-tH1ef1ofKCSiGNXaAT0GM2xbR1srGUOPLTn6wa7XgAGvsUxPSePY1jjIdqWi1p3blPQkkc-5ev-rg1He6yksHRnV_GcrjppfdrUMt-VA_AvTNzpbBdNAEokrIgjy3bS31YnTyc8MUnIeyPj9pTVzA-f8lJP_qCwHjr2yrs3A8MscO-JHCV6m4dFNHdSpmhsYkSSsbzEU9HyavOtP-5nfuc8T6NPBac9QFf68WesOIhJWFL0Ko9cUl-_ydSMHIdHjgeDABuy8"/>
+</div>
+<div>
+<h3 class="font-headline-md text-2xl mb-1">생크추어리 룸</h3>
+<p class="font-body-md text-secondary">모노리식 욕조 · 정원 테라스</p>
+<span class="font-serif text-xl mt-2 inline-block">₩950,000 <span class="text-xs text-neutral-400">/ 1박</span></span>
+</div>
+</div>
+<!-- Third Card (Asymmetric) -->
+<div class="md:col-span-12 group cursor-pointer grid md:grid-cols-2 items-center gap-16 mt-16">
+<div class="order-2 md:order-1">
+<span class="font-label-caps text-[10px] text-neutral-400 tracking-widest mb-4 block">한정 객실</span>
+<h3 class="font-headline-md text-3xl mb-4">호라이즌 로프트</h3>
+<p class="font-body-lg text-secondary leading-relaxed mb-8">
+                            계곡의 바닥 위에 떠있는 로프트는 270도의 지평선 파노라마를 제공합니다. 완벽한 침묵과 시각적 순수함을 위해 설계되었습니다.
+                        </p>
+<button class="px-8 py-4 border border-neutral-950 font-label-caps tracking-widest hover:bg-neutral-950 hover:text-white transition-all">로프트 둘러보기</button>
+</div>
+<div class="overflow-hidden aspect-square md:aspect-[4/3] order-1 md:order-2 bg-neutral-100">
+<img class="w-full h-full object-cover grayscale-[30%] group-hover:scale-105 transition-transform duration-1000" data-alt="A high-angle shot of a minimalist beach house terrace featuring a single low-profile sun lounger in black metal and tan leather. The terrace overlooks a vast, shimmering ocean under a clear, bright sky. The flooring is composed of smooth, light-toned limestone planks with thin, precise gaps. The lighting is harsh midday sun, creating sharp, dramatic shadows that highlight the architectural precision of the space. It is a portrait of solitude and luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmsMadBh3XWGiGW7NGLpeF0PvdXy3x31vNdiF3OWo3GNey_KyZrbtxanJ4VC-9x609wBn0-RseTKmbnZyfJsmrlsck7tVTWM0AUwDMeTS-ySWc3DJBgHnREVAVLxbiyhOmF7_RTUYkA58FmZ04fbV7pryrriV4b1rM9i5dTMI-Jeojj6LO1WzqKWzA0tjjhm7UU--hLTX6khJubAos4G_Nbpt8-1SPw0A-aH8knaKqIPvO7SuFOEDGXLVZNFzHf0jSHkvYbotkfgA"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Sanctuary/Spa Teaser -->
+<section class="bg-neutral-100 py-section-gap">
+<div class="max-w-7xl mx-auto px-margin-page text-center">
+<span class="material-symbols-outlined text-4xl mb-8 text-neutral-400">spa</span>
+<h2 class="font-display-lg text-display-lg max-w-4xl mx-auto mb-12">자신으로 돌아가다.</h2>
+<div class="flex flex-col md:flex-row justify-center gap-12 text-left max-w-5xl mx-auto border-t border-neutral-200 pt-12">
+<div class="flex-1">
+<h4 class="font-label-caps text-label-caps mb-4">수치료</h4>
+<p class="font-body-md text-secondary">순환을 자극하고 근육의 깊은 이완을 촉진하도록 설계된 제어된 온열 사이클.</p>
+</div>
+<div class="flex-1 border-l border-neutral-200 pl-12">
+<h4 class="font-label-caps text-label-caps mb-4">침묵 의식</h4>
+<p class="font-body-md text-secondary">우리의 모놀리식 생크추어리 파빌리온에서 새벽에 진행되는 명상 세션.</p>
+</div>
+<div class="flex-1 border-l border-neutral-200 pl-12">
+<h4 class="font-label-caps text-label-caps mb-4">보태니컬 랩</h4>
+<p class="font-body-md text-secondary">우리의 독특한 산악 생태계에 자생하는 식물로 만든 커스텀 블렌드 에센스.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-24 bg-neutral-50 border-t border-neutral-200">
+<div class="flex flex-col md:flex-row justify-between items-center px-16 py-12 gap-8">
+<div class="flex flex-col md:flex-row gap-8 items-center">
+<a class="font-serif text-[10px] tracking-[0.2em] text-neutral-400 hover:text-neutral-950 transition-all duration-300" href="#">개인정보처리방침</a>
+<a class="font-serif text-[10px] tracking-[0.2em] text-neutral-400 hover:text-neutral-950 transition-all duration-300" href="#">이용약관</a>
+<a class="font-serif text-[10px] tracking-[0.2em] text-neutral-400 hover:text-neutral-950 transition-all duration-300" href="#">보도자료</a>
+<a class="font-serif text-[10px] tracking-[0.2em] text-neutral-400 hover:text-neutral-950 transition-all duration-300" href="#">문의하기</a>
+</div>
+<div class="font-serif text-[10px] tracking-[0.2em] text-neutral-900 text-center md:text-right">
+                © 2024 에센스 호텔 &amp; 리조트. 모든 권리 보유.
+            </div>
+</div>
+<div class="w-full h-1 bg-neutral-950"></div>
+</footer>
+<!-- Mobile Navigation Drawer (Hidden by default) -->
+<div class="hidden fixed inset-0 z-[100]" id="drawer">
+<div class="absolute inset-0 bg-black/20 backdrop-blur-sm"></div>
+<div class="fixed inset-y-0 left-0 z-[60] flex flex-col p-12 bg-white w-80 h-full border-r border-neutral-200 transition-transform duration-500">
+<div class="font-serif text-3xl mb-12">L'ESSENCE</div>
+<nav class="flex flex-col gap-8">
+<a class="font-serif text-xl tracking-wide text-neutral-950 font-medium hover:pl-4 transition-all duration-300 flex items-center gap-4" href="#">
+<span class="material-symbols-outlined">architecture</span> 에센스 리트릿
+                </a>
+<a class="font-serif text-xl tracking-wide text-neutral-400 hover:pl-4 transition-all duration-300 flex items-center gap-4" href="#">
+<span class="material-symbols-outlined">bed</span> 객실
+                </a>
+<a class="font-serif text-xl tracking-wide text-neutral-400 hover:pl-4 transition-all duration-300 flex items-center gap-4" href="#">
+<span class="material-symbols-outlined">spa</span> 스파
+                </a>
+<a class="font-serif text-xl tracking-wide text-neutral-400 hover:pl-4 transition-all duration-300 flex items-center gap-4" href="#">
+<span class="material-symbols-outlined">restaurant</span> 다이닝
+                </a>
+<a class="font-serif text-xl tracking-wide text-neutral-400 hover:pl-4 transition-all duration-300 flex items-center gap-4" href="#">
+<span class="material-symbols-outlined">doorbell</span> 콘시어지
+                </a>
+</nav>
+</div>
+</div>
+<script>
+const API_URL = 'http://localhost:3000/api/reserve';
+
+document.getElementById('reserveBtn').addEventListener('click', async () => {
+  const userName = document.getElementById('userName').value;
+  const checkIn = document.getElementById('checkIn').value;
+  const checkOut = document.getElementById('checkOut').value;
+  const guests = document.getElementById('guests').value;
+  const notification = document.getElementById('notification');
+  const btn = document.getElementById('reserveBtn');
+
+  if (!userName || !checkIn || !checkOut || !guests) {
+    showNotification('모든 항목을 입력해주세요', false);
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '처리 중...';
+
+  try {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userName, checkIn, checkOut, guests })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      showNotification('✓ 예약 요청이 접수되었습니다', true);
+      document.getElementById('userName').value = '';
+      document.getElementById('checkIn').value = '';
+      document.getElementById('checkOut').value = '';
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = '예약 가능 여부 확인';
+      }, 2000);
+    } else {
+      showNotification('✗ ' + (data.error || '요청 실패'), false);
+      btn.disabled = false;
+      btn.textContent = '예약 가능 여부 확인';
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    showNotification('✗ 서버 연결 실패. 백엔드가 실행 중인지 확인하세요', false);
+    btn.disabled = false;
+    btn.textContent = '예약 가능 여부 확인';
+  }
+});
+
+function showNotification(message, isSuccess) {
+  const notification = document.getElementById('notification');
+  notification.textContent = message;
+  notification.className = isSuccess
+    ? 'fixed top-20 right-8 bg-green-600 text-white px-6 py-4 rounded-lg fade-in z-40'
+    : 'fixed top-20 right-8 bg-red-600 text-white px-6 py-4 rounded-lg fade-in z-40';
+
+  setTimeout(() => {
+    notification.className = 'fixed top-20 right-8 bg-neutral-950 text-white px-6 py-4 rounded-lg hidden z-40';
+  }, 4000);
+}
+</script>
+</body></html>

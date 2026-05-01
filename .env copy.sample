@@ -1,0 +1,8 @@
+# Google Sheets API 설정
+SHEET_ID=YOUR_GOOGLE_SHEET_ID
+
+# 서버 설정
+PORT=3000
+
+# 서비스 계정 JSON 키 파일 경로 (프로젝트 루트에 배치)
+# 파일명: service-account-key.json

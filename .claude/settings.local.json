@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -X POST http://localhost:3000/api/reserve -H 'Content-Type: application/json' -d '{\"userName\":\"김민준\",\"checkIn\":\"2026-05-20\",\"checkOut\":\"2026-05-27\",\"guests\":\"02 Adults\"}')"
+    ]
+  }
+}
