@@ -4,10 +4,6 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "main.html",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -16,15 +12,12 @@
       "dest": "server.js"
     },
     {
-      "src": "/main.html",
+      "src": "/",
       "dest": "main.html"
     },
     {
       "src": "/(.*)",
       "dest": "main.html"
     }
-  ],
-  "env": {
-    "SHEET_ID": "@sheet_id"
-  }
+  ]
 }
