@@ -1,21 +1,24 @@
 {
   "version": 2,
-  "public": false,
-  "buildCommand": "npm install",
+  "builds": [
+    {
+      "src": "api/reserve.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    }
+  ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1.js"
+      "src": "/api/reserve",
+      "dest": "api/reserve.js",
+      "methods": ["POST"]
     },
     {
       "src": "/(.*)",
-      "dest": "/public/$1"
+      "dest": "index.html"
     }
-  ],
-  "functions": {
-    "api/reserve.js": {
-      "memory": 1024,
-      "maxDuration": 30
-    }
-  }
+  ]
 }
