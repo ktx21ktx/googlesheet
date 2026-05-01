@@ -20,16 +20,111 @@
    - GitHub 저장소 선택: `ktx21ktx/googlesheet`
    - "Import" 클릭
 
-3. **환경 변수 설정**
-   - "Environment Variables" 섹션에서 추가:
-     ```
-     SHEET_ID: YOUR_GOOGLE_SHEET_ID
-     PORT: 3000
-     ```
+3. **환경 변수 설정** 📝
+
+   Vercel에 배포하기 전에 환경 변수를 설정해야 합니다. 이는 프로덕션 환경에서 안전하게 민감한 정보를 관리하기 위함입니다.
+
+   #### 3-1. 환경 변수 추가 화면 접근
+
+   ```
+   1. Vercel 대시보드 접속
+   2. 프로젝트 선택 (또는 "Import" 후 자동으로 표시)
+   3. "Environment Variables" 탭 클릭
+      (또는 Settings → Environment Variables)
+   ```
+
+   #### 3-2. SHEET_ID 추가하기
+
+   **SHEET_ID 값 찾기:**
+   ```
+   Google Sheet URL 예시:
+   https://docs.google.com/spreadsheets/d/1a2b3c4d5e6f7g8h9i0j/edit#gid=0
+                                      ↑ 이 부분이 SHEET_ID
+   ```
+
+   **Vercel에서 추가:**
+   ```
+   NAME: SHEET_ID
+   VALUE: 1a2b3c4d5e6f7g8h9i0j (위에서 복사한 ID)
+   ENVIRONMENT: Production (또는 All)
+   
+   → "Save" 클릭
+   ```
+
+   #### 3-3. PORT 추가하기
+
+   **Vercel에서 추가:**
+   ```
+   NAME: PORT
+   VALUE: 3000
+   ENVIRONMENT: Production (또는 All)
+   
+   → "Save" 클릭
+   ```
+
+   **PORT 설명:**
+   - 서버가 실행될 포트 번호
+   - 기본값: 3000
+   - 변경 필요 없음 (Vercel이 자동으로 관리)
+
+   #### 3-4. 추가 필수 설정
+
+   **service-account-key.json 처리:**
+
+   Google Sheets API를 사용하려면 서비스 계정 인증이 필요합니다.
+
+   **두 가지 방법:**
+
+   **방법 1: Base64 인코딩 (권장)**
+   ```
+   1. service-account-key.json 파일 준비
+   2. 파일을 Base64로 인코딩:
+      - Windows: certutil -encode service-account-key.json temp.txt
+      - Mac/Linux: base64 service-account-key.json
+   
+   3. Vercel에 추가:
+      NAME: GOOGLE_CREDENTIALS_BASE64
+      VALUE: [Base64로 인코딩된 내용]
+      ENVIRONMENT: Production
+   
+   4. server.js 수정 (선택사항)
+   ```
+
+   **방법 2: 직접 지정 (간단)**
+   ```
+   1. Vercel Settings → General
+   2. "Function Memory": 1024 MB 설정
+   3. 서비스 계정 JSON을 프로젝트에 포함
+      (단, .gitignore에 추가 필수)
+   ```
+
+   #### 3-5. 환경 변수 검증
+
+   모든 환경 변수를 추가한 후 확인 사항:
+
+   ```
+   ✅ SHEET_ID: 25자의 Google Sheet ID
+   ✅ PORT: 3000
+   ✅ 서비스 계정: 설정 완료
+   ```
+
+   **확인 방법:**
+   ```
+   Vercel 대시보드 → Settings → Environment Variables
+   → 위의 모든 항목이 표시되어야 함
+   ```
 
 4. **배포**
    - "Deploy" 클릭
    - 배포 완료 대기 (약 1-2분)
+
+   **배포 진행 상황 확인:**
+   ```
+   1. Vercel 대시보드에서 "Deployments" 탭 클릭
+   2. 최신 배포 항목의 상태 확인:
+      - "Building" → 배포 중
+      - "Ready" → 배포 완료 ✅
+   ```
 
 5. **완료!**
    - 배포된 URL 확인
