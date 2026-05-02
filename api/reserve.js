@@ -3,6 +3,11 @@ const { initializeSheets, appendReservation } = require('../lib/sheetService');
 const { getUserMessage } = require('../lib/errors');
 const { getKoreanTime } = require('../lib/utils');
 
+const isValidEmail = (email) => {
+  if (!email) return true;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -21,16 +26,20 @@ module.exports = async (req, res) => {
   try {
     config.validate();
 
-    const { userName, checkIn, checkOut, guests } = req.body;
+    const { userName, checkIn, checkOut, guests, email } = req.body;
 
     if (!userName || !checkIn || !checkOut || !guests) {
       return res.status(400).json({ error: '필수 정보가 누락되었습니다' });
     }
 
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ error: '유효한 이메일 형식을 입력해주세요' });
+    }
+
     const sheetsAPI = await initializeSheets();
 
     const timestamp = getKoreanTime();
-    const data = { timestamp, userName, checkIn, checkOut, guests };
+    const data = { timestamp, userName, checkIn, checkOut, guests, email };
 
     await appendReservation(sheetsAPI, config.SHEET_ID, data);
 
