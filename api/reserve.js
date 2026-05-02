@@ -16,14 +16,24 @@ async function initializeSheets() {
       const credFile = fs.readFileSync(credPath, 'utf-8');
       credentials = JSON.parse(credFile);
     }
-    // 방법 2: 환경 변수에서 JSON 직접 읽기 (Vercel)
-    else if (process.env.GOOGLE_CREDENTIALS) {
-      credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
-    }
-    // 방법 3: 환경 변수에서 Base64 디코딩 (Vercel)
+    // 방법 2: 환경 변수에서 Base64 디코딩 (Vercel - 우선)
     else if (process.env.GOOGLE_CREDENTIALS_BASE64) {
-      const decoded = Buffer.from(process.env.GOOGLE_CREDENTIALS_BASE64, 'base64').toString('utf-8');
-      credentials = JSON.parse(decoded);
+      try {
+        const decoded = Buffer.from(process.env.GOOGLE_CREDENTIALS_BASE64, 'base64').toString('utf-8');
+        credentials = JSON.parse(decoded);
+      } catch (decodeError) {
+        console.error('Base64 디코딩 실패:', decodeError.message);
+        throw new Error('Base64 디코딩 실패: ' + decodeError.message);
+      }
+    }
+    // 방법 3: 환경 변수에서 JSON 직접 읽기 (Vercel)
+    else if (process.env.GOOGLE_CREDENTIALS) {
+      try {
+        credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+      } catch (parseError) {
+        console.error('JSON 파싱 실패:', parseError.message);
+        throw new Error('JSON 파싱 실패: ' + parseError.message);
+      }
     }
     else {
       throw new Error('서비스 계정 인증 정보를 찾을 수 없습니다. GOOGLE_CREDENTIALS 환경 변수를 설정하세요.');
