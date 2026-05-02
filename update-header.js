@@ -26,18 +26,18 @@ async function updateHeader() {
     // 현재 헤더 확인
     const headerResult = await sheets.spreadsheets.values.get({
       spreadsheetId: SHEET_ID,
-      range: `'${sheetName}'!A1:E1`,
+      range: `'${sheetName}'!A1:G1`,
     });
 
     const currentHeader = headerResult.data.values?.[0] || [];
     console.log('현재 헤더:', currentHeader);
 
     // 새 헤더 설정
-    const newHeader = ['Timestamp', '사용자명', 'Check-in', 'Check-out', 'Guests'];
+    const newHeader = ['Timestamp', '사용자명', 'Check-in', 'Check-out', 'Guests', 'Phone', 'Email'];
 
     await sheets.spreadsheets.values.update({
       spreadsheetId: SHEET_ID,
-      range: `'${sheetName}'!A1:E1`,
+      range: `'${sheetName}'!A1:G1`,
       valueInputOption: 'USER_ENTERED',
       resource: {
         values: [newHeader]

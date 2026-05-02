@@ -1,320 +1,459 @@
 # Vercel 배포 가이드
 
-이 프로젝트를 Vercel에 배포하는 방법을 설명합니다.
+L'ESSENCE 호텔 예약 시스템을 Vercel에 배포합니다.
 
-## 배포 옵션
+## 📋 프로젝트 구조
 
-### 옵션 1: GitHub 자동 연동 배포 (권장) ⭐
-
-가장 간단한 방법입니다. Vercel이 GitHub과 자동으로 연동됩니다.
-
-#### 단계:
-
-1. **Vercel 계정 생성**
-   - https://vercel.com 접속
-   - "Sign Up" 클릭
-   - GitHub 계정으로 로그인
-
-2. **GitHub 저장소 연동**
-   - Vercel 대시보드에서 "New Project" 클릭
-   - GitHub 저장소 선택: `ktx21ktx/googlesheet`
-   - "Import" 클릭
-
-3. **환경 변수 설정** 📝
-
-   Vercel에 배포하기 전에 환경 변수를 설정해야 합니다. 이는 프로덕션 환경에서 안전하게 민감한 정보를 관리하기 위함입니다.
-
-   #### 3-1. 환경 변수 추가 화면 접근
-
-   ```
-   1. Vercel 대시보드 접속
-   2. 프로젝트 선택 (또는 "Import" 후 자동으로 표시)
-   3. "Environment Variables" 탭 클릭
-      (또는 Settings → Environment Variables)
-   ```
-
-   #### 3-2. SHEET_ID 추가하기
-
-   **SHEET_ID 값 찾기:**
-   ```
-   Google Sheet URL 예시:
-   https://docs.google.com/spreadsheets/d/1a2b3c4d5e6f7g8h9i0j/edit#gid=0
-                                      ↑ 이 부분이 SHEET_ID
-   ```
-
-   **Vercel에서 추가:**
-   ```
-   NAME: SHEET_ID
-   VALUE: 1a2b3c4d5e6f7g8h9i0j (위에서 복사한 ID)
-   ENVIRONMENT: Production (또는 All)
-   
-   → "Save" 클릭
-   ```
-
-   #### 3-3. PORT 추가하기
-
-   **Vercel에서 추가:**
-   ```
-   NAME: PORT
-   VALUE: 3000
-   ENVIRONMENT: Production (또는 All)
-   
-   → "Save" 클릭
-   ```
-
-   **PORT 설명:**
-   - 서버가 실행될 포트 번호
-   - 기본값: 3000
-   - 변경 필요 없음 (Vercel이 자동으로 관리)
-
-   #### 3-4. 추가 필수 설정
-
-   **service-account-key.json 처리:**
-
-   Google Sheets API를 사용하려면 서비스 계정 인증이 필요합니다.
-
-   **두 가지 방법:**
-
-   **방법 1: Base64 인코딩 (권장)**
-   ```
-   1. service-account-key.json 파일 준비
-   2. 파일을 Base64로 인코딩:
-      - Windows: certutil -encode service-account-key.json temp.txt
-      - Mac/Linux: base64 service-account-key.json
-   
-   3. Vercel에 추가:
-      NAME: GOOGLE_CREDENTIALS_BASE64
-      VALUE: [Base64로 인코딩된 내용]
-      ENVIRONMENT: Production
-   
-   4. server.js 수정 (선택사항)
-   ```
-
-   **방법 2: 직접 지정 (간단)**
-   ```
-   1. Vercel Settings → General
-   2. "Function Memory": 1024 MB 설정
-   3. 서비스 계정 JSON을 프로젝트에 포함
-      (단, .gitignore에 추가 필수)
-   ```
-
-   #### 3-5. 환경 변수 검증
-
-   모든 환경 변수를 추가한 후 확인 사항:
-
-   ```
-   ✅ SHEET_ID: 25자의 Google Sheet ID
-   ✅ PORT: 3000
-   ✅ 서비스 계정: 설정 완료
-   ```
-
-   **확인 방법:**
-   ```
-   Vercel 대시보드 → Settings → Environment Variables
-   → 위의 모든 항목이 표시되어야 함
-   ```
-
-4. **배포**
-   - "Deploy" 클릭
-   - 배포 완료 대기 (약 1-2분)
-
-   **배포 진행 상황 확인:**
-   ```
-   1. Vercel 대시보드에서 "Deployments" 탭 클릭
-   2. 최신 배포 항목의 상태 확인:
-      - "Building" → 배포 중
-      - "Ready" → 배포 완료 ✅
-   ```
-
-5. **완료!**
-   - 배포된 URL 확인
-   - 예: `https://googlesheet-ktx21ktx.vercel.app`
-
----
-
-### 옵션 2: Vercel CLI로 배포
-
-로컬에서 직접 배포하는 방법입니다.
-
-#### 단계:
-
-1. **Vercel CLI 설치**
-   ```bash
-   npm install -g vercel
-   ```
-
-2. **Vercel 로그인**
-   ```bash
-   vercel login
-   ```
-   - GitHub 계정으로 로그인
-
-3. **프로젝트 디렉토리 이동**
-   ```bash
-   cd "c:\00 claude\20260501 홈피 구축"
-   ```
-
-4. **배포**
-   ```bash
-   vercel
-   ```
-
-5. **질문에 답변**
-   ```
-   ? Set up and deploy "..."? [Y/n] Y
-   ? Which scope do you want to deploy to? (your-username)
-   ? Link to existing project? [y/N] N
-   ? What's your project's name? googlesheet
-   ? In which directory is your code located? ./
-   ? Want to modify these settings? [y/N] N
-   ```
-
-6. **환경 변수 설정**
-   ```bash
-   vercel env add SHEET_ID
-   # YOUR_GOOGLE_SHEET_ID 입력
-   
-   vercel env add PORT
-   # 3000 입력
-   ```
-
-7. **재배포**
-   ```bash
-   vercel --prod
-   ```
-
----
-
-## 배포 후 확인
-
-### 1. 웹사이트 접속
 ```
-https://your-project-name.vercel.app
+project-root/
+├── api/
+│   └── reserve.js           # Serverless 함수 (예약 저장)
+├── index.html               # 메인 페이지 (정적 파일)
+├── public/
+│   └── index.html           # 정적 파일 복사본
+├── vercel.json              # Vercel 설정
+├── package.json             # npm 패키지 설정
+├── .env.sample              # 환경 변수 템플릿
+├── .gitignore               # Git 제외 파일
+└── README.md                # 프로젝트 설명
 ```
 
-### 2. 예약 폼 테스트
-1. 이름 입력
-2. 입실일 선택
-3. 퇴실일 선택
-4. 인원수 선택
-5. "예약 가능 여부 확인" 클릭
+## 🚀 배포 방법 (2가지)
 
-### 3. Google Sheet 확인
-예약 데이터가 Google Sheet에 저장되었는지 확인합니다.
+### 옵션 1: GitHub 자동 연동 배포 ⭐ (권장)
+
+#### Step 1: Vercel 계정 생성
+
+1. https://vercel.com 접속
+2. "Sign Up" 클릭
+3. GitHub 계정으로 로그인
+
+#### Step 2: 프로젝트 연동
+
+1. Vercel 대시보드 → "New Project" 클릭
+2. GitHub 저장소 선택: `ktx21ktx/googlesheet`
+3. "Import" 클릭
+
+#### Step 3: 프로젝트 설정
+
+```
+프로젝트명: essence-hotel
+(소문자, 하이픈만 가능)
+```
+
+#### Step 4: 환경 변수 설정 📝
+
+**Vercel 대시보드에서:**
+
+```
+Settings → Environment Variables
+```
+
+**두 가지 방법 중 선택:**
+
+##### 🟦 방법 A: JSON 직접 저장 (추천) ⭐
+
+```
+NAME: GOOGLE_CREDENTIALS
+VALUE: {JSON 파일 전체 내용}
+ENVIRONMENT: Production
+```
+
+**JSON 얻는 방법:**
+```
+1. service-account-key.json 파일을 텍스트 에디터로 열기
+2. 전체 내용 복사 (Ctrl+A → Ctrl+C)
+3. Vercel "Value" 필드에 붙여넣기 (Ctrl+V)
+```
+
+**JSON 예시:**
+```json
+{
+  "type": "service_account",
+  "project_id": "your-project",
+  "private_key_id": "key-id",
+  "private_key": "-----BEGIN PRIVATE KEY-----\n...",
+  "client_email": "service@your-project.iam.gserviceaccount.com",
+  ...
+}
+```
+
+##### 🟦 방법 B: Base64 인코딩
+
+**로컬에서 인코딩:**
+
+Windows:
+```bash
+certutil -encode service-account-key.json temp.txt
+# temp.txt 파일의 내용 복사
+```
+
+Mac/Linux:
+```bash
+base64 service-account-key.json
+```
+
+**Vercel에 설정:**
+```
+NAME: GOOGLE_CREDENTIALS_BASE64
+VALUE: [Base64 인코딩된 내용]
+ENVIRONMENT: Production
+```
+
+##### 📌 필수 환경 변수
+
+반드시 설정해야 할 환경 변수:
+
+```
+✅ SHEET_ID: YOUR_GOOGLE_SHEET_ID
+✅ GOOGLE_CREDENTIALS (JSON) 또는 GOOGLE_CREDENTIALS_BASE64
+```
+
+#### Step 5: 배포
+
+```
+1. 모든 환경 변수 입력 완료
+2. "Deploy" 버튼 클릭
+3. 배포 진행 대기 (1-2분)
+```
+
+**배포 상태 확인:**
+```
+Vercel 대시보드 → Deployments 탭
+상태: "Ready" ✅ (배포 완료)
+```
 
 ---
 
-## 문제 해결
+### 옵션 2: Vercel CLI 배포
 
-### "SHEET_ID가 설정되지 않았습니다" 오류
-
-**해결책:**
-1. Vercel 대시보드 → Settings → Environment Variables
-2. `SHEET_ID` 추가 또는 수정
-3. Redeploy 실행
-
-### "Permission denied" 오류
-
-**해결책:**
-1. Google Cloud Console 확인
-2. 서비스 계정 이메일이 Google Sheet에 공유되었는지 확인
-3. 권한: "편집자"로 설정
-
-### API 요청 실패
-
-**해결책:**
-1. 브라우저 콘솔에서 네트워크 오류 확인
-2. Vercel 로그 확인:
-   ```bash
-   vercel logs
-   ```
-
----
-
-## 고급 설정
-
-### 자동 배포 설정
-
-GitHub에 푸시하면 자동으로 배포됩니다:
-
-1. Vercel 대시보드 → Settings → Git
-2. "Deploy on every branch push" 활성화
-
-### 커스텀 도메인 설정
-
-1. Vercel 대시보드 → Settings → Domains
-2. "Add Domain" 클릭
-3. 도메인 입력
-4. DNS 설정 완료
-
-### 배포 미리보기
-
-Pull Request를 생성하면 미리보기 URL이 자동 생성됩니다:
-- Example: `https://googlesheet-ktx21ktx-pr-1.vercel.app`
-
----
-
-## 프로덕션 URL
-
-배포 완료 후:
-- **기본 URL**: https://googlesheet.vercel.app (커스텀 도메인 설정 후)
-- **Vercel URL**: https://googlesheet-ktx21ktx.vercel.app
-
----
-
-## 로그 확인
-
-배포 후 로그를 확인하려면:
+#### 1단계: Vercel CLI 설치
 
 ```bash
-vercel logs
+npm install -g vercel
 ```
 
-또는 Vercel 대시보드에서 → "Deployments" → 최신 배포 클릭 → "Logs"
+#### 2단계: Vercel 로그인
+
+```bash
+vercel login
+```
+
+#### 3단계: 배포
+
+```bash
+cd "c:\00 claude\20260501 홈피 구축"
+vercel
+```
+
+**질문에 답변:**
+```
+? Set up and deploy "..."? [Y/n] Y
+? Which scope? [your-username]
+? Link to existing project? [y/N] N
+? Project name? essence-hotel
+? Which directory? ./
+? Modify settings? [y/N] N
+```
+
+#### 4단계: 환경 변수 설정
+
+```bash
+vercel env add GOOGLE_CREDENTIALS
+# JSON 파일 전체 내용 입력
+
+vercel env add SHEET_ID
+# Google Sheet ID 입력
+```
+
+#### 5단계: 프로덕션 배포
+
+```bash
+vercel --prod
+```
 
 ---
 
-## 환경 변수 관리
+## 📊 배포 후 확인
 
-### 개발 환경 (.env.local)
+### 1단계: 웹사이트 접속
+
 ```
-SHEET_ID=YOUR_SHEET_ID
-PORT=3000
+https://essence-hotel.vercel.app
 ```
 
-### 프로덕션 환경 (Vercel)
-Vercel 대시보드에서 설정:
-- `SHEET_ID`
-- `PORT` (선택사항, 기본값 3000)
+(또는 Vercel에서 제공하는 프로젝트 URL)
+
+### 2단계: 페이지 로드 확인
+
+```
+✅ 페이지 정상 로드
+✅ 예약 폼 표시됨
+✅ 헤더에 "L'ESSENCE" 로고 표시
+```
+
+### 3단계: 기능 테스트
+
+**예약 폼 입력:**
+```
+이름: 테스트 사용자
+입실일: 2026-06-01
+퇴실일: 2026-06-10
+인원수: 2명
+```
+
+**예약 제출:**
+```
+"예약 가능 여부 확인" 버튼 클릭
+→ ✅ 성공 메시지 표시: "예약 요청이 접수되었습니다"
+```
+
+### 4단계: Google Sheet 확인
+
+**Google Sheet 열기:**
+```
+https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit
+```
+
+**확인 사항:**
+```
+✅ 새 행이 추가됨
+✅ 시간 기록됨
+✅ 사용자명 저장됨
+✅ 입실일/퇴실일 저장됨
+✅ 인원수 저장됨
+```
 
 ---
 
-## 배포 비용
+## 🔧 Vercel 설정 상세
 
-✅ **완전 무료**
-- Vercel은 개인 프로젝트에 무료 호스팅 제공
-- Google Sheets API도 무료
+### vercel.json 설정
 
-## 배포 후 다음 단계
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/reserve.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/reserve",
+      "dest": "api/reserve.js",
+      "methods": ["POST"]
+    },
+    {
+      "src": "/(.*)",
+      "dest": "index.html"
+    }
+  ]
+}
+```
 
-1. **도메인 설정** (선택사항)
-   - 커스텀 도메인 연결
+**각 항목 설명:**
+- `builds`: 빌드 설정
+  - `api/reserve.js`: Node.js Serverless Function
+  - `index.html`: 정적 파일
+- `routes`: URL 라우팅
+  - `/api/reserve`: POST 요청 → Serverless Function
+  - `/*`: 나머지 요청 → index.html (프론트엔드)
 
-2. **모니터링 설정** (선택사항)
-   - Vercel Analytics 활성화
+### api/reserve.js 구조
 
-3. **성능 최적화** (선택사항)
-   - 이미지 최적화
-   - 캐싱 설정
+```javascript
+// Serverless 함수의 엔드포인트
+module.exports = async (req, res) => {
+  // CORS 설정
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  
+  // 요청 처리
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: '메서드가 허용되지 않습니다' });
+  }
+
+  try {
+    // 1. 요청 데이터 검증
+    const { userName, checkIn, checkOut, guests } = req.body;
+    
+    // 2. Google Sheets API 초기화
+    // - GOOGLE_CREDENTIALS 환경 변수에서 인증 정보 읽기
+    // - 또는 GOOGLE_CREDENTIALS_BASE64에서 Base64 디코딩
+    
+    // 3. 데이터 저장
+    await sheetsAPI.spreadsheets.values.append({...});
+    
+    // 4. 응답
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: '저장 실패' });
+  }
+};
+```
 
 ---
 
-## 문의
+## ⚠️ 문제 해결
 
-배포 중 문제가 생기면:
+### 문제 1: "Cannot GET /" (404 에러)
+
+**원인:** 정적 파일이 서빙되지 않음
+
+**해결:**
+```
+1. Vercel 대시보드 → Deployments
+2. 최신 배포의 "Logs" 탭 확인
+3. 오류 메시지 확인
+4. 라우팅 설정 재확인
+```
+
+### 문제 2: "데이터 저장 실패"
+
+**원인:** 서비스 계정 인증 실패
+
+**해결:**
+```
+1. Vercel Settings → Environment Variables
+2. GOOGLE_CREDENTIALS 또는 GOOGLE_CREDENTIALS_BASE64 확인
+3. 값이 올바르게 입력되었는지 확인
+4. Redeploy 실행
+```
+
+**확인 체크리스트:**
+```
+✅ GOOGLE_CREDENTIALS (JSON 전체) 또는 GOOGLE_CREDENTIALS_BASE64 설정됨
+✅ SHEET_ID 설정됨
+✅ 서비스 계정 이메일이 Google Sheet에 공유됨 (편집자 권한)
+```
+
+### 문제 3: "SHEET_ID가 설정되지 않았습니다"
+
+**원인:** 환경 변수 누락
+
+**해결:**
+```
+1. Vercel Settings → Environment Variables
+2. SHEET_ID 추가:
+   NAME: SHEET_ID
+   VALUE: [Google Sheet ID]
+   ENVIRONMENT: Production
+3. Redeploy
+```
+
+### 문제 4: 배포 실패
+
+**원인:** 빌드 오류
+
+**해결:**
+```
+1. Vercel 대시보드 → Deployments
+2. 실패한 배포 클릭 → Logs 탭
+3. 에러 메시지 확인
+4. GitHub에서 수정 후 재푸시
+```
+
+---
+
+## 🔄 배포 후 업데이트
+
+### 코드 수정 후 배포
+
+**GitHub 푸시:**
+```bash
+git add .
+git commit -m "fix: description"
+git push
+```
+
+**자동 배포:**
+```
+Vercel이 GitHub 푸시를 감지하면 자동으로 재배포
+약 1-2분 후 완료
+```
+
+### 환경 변수 수정 후 배포
+
+```
+1. Vercel Settings → Environment Variables에서 수정
+2. Deployments → 최신 배포 → "Redeploy" 클릭
+3. 배포 완료 대기
+```
+
+---
+
+## 📈 성능 최적화
+
+### 배포 후 확인
+
+```
+Vercel Analytics:
+- 페이지 로딩 속도 확인
+- 주요 Web Vitals 확인
+- 에러 로그 모니터링
+```
+
+### 캐싱 설정
+
+```
+vercel.json에 추가 가능:
+"headers": [
+  {
+    "source": "/public/(.*)",
+    "headers": [
+      {
+        "key": "Cache-Control",
+        "value": "public, max-age=3600"
+      }
+    ]
+  }
+]
+```
+
+---
+
+## 🎯 체크리스트
+
+배포 전:
+- [ ] service-account-key.json 준비
+- [ ] SHEET_ID 확인
+- [ ] GitHub 저장소 최신화
+
+배포 중:
+- [ ] Vercel 계정 생성
+- [ ] 프로젝트 생성
+- [ ] 환경 변수 설정
+- [ ] 배포 실행
+
+배포 후:
+- [ ] 웹사이트 로드 확인
+- [ ] 예약 폼 표시 확인
+- [ ] 예약 제출 테스트
+- [ ] Google Sheet 저장 확인
+
+---
+
+## 📞 지원
+
+**문제 발생 시:**
+1. Vercel 로그 확인
+2. GitHub Issues에 문제 보고
+3. 문서 다시 읽기
+
+**유용한 링크:**
 - Vercel 문서: https://vercel.com/docs
-- GitHub Issues: https://github.com/ktx21ktx/googlesheet/issues
+- GitHub: https://github.com/ktx21ktx/googlesheet
+- Google Sheets API: https://developers.google.com/sheets
 
 ---
 
 **배포 완료를 축하합니다! 🎉**
+
+이제 완전히 자동화된 호텔 예약 시스템이 온라인에서 운영됩니다.
+
+**배포 URL:** https://essence-hotel.vercel.app
