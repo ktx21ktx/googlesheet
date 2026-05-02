@@ -44,7 +44,7 @@ async function initializeSheets() {
     }
 
     const auth = new google.auth.GoogleAuth({
-      credentials: credentials,
+      keyFile: credPath,  // server.js와 동일하게 keyFile 옵션 사용
       scopes: ['https://www.googleapis.com/auth/spreadsheets'],
     });
     sheets = google.sheets({ version: 'v4', auth });
