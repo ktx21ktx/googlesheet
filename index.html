@@ -144,12 +144,12 @@
 <!-- Check-in Date -->
 <div class="flex flex-col">
 <label class="font-label-caps text-sm text-neutral-500 mb-3 tracking-wider">입실일</label>
-<input type="date" id="checkIn" class="font-body-lg text-lg text-neutral-900 bg-transparent border-b-2 border-neutral-300 outline-none py-3 px-2 focus:border-neutral-950 transition-colors" value="2024-10-12">
+<input type="date" id="checkIn" class="font-body-lg text-lg text-neutral-900 bg-transparent border-b-2 border-neutral-300 outline-none py-3 px-2 focus:border-neutral-950 transition-colors">
 </div>
 <!-- Check-out Date -->
 <div class="flex flex-col">
 <label class="font-label-caps text-sm text-neutral-500 mb-3 tracking-wider">퇴실일</label>
-<input type="date" id="checkOut" class="font-body-lg text-lg text-neutral-900 bg-transparent border-b-2 border-neutral-300 outline-none py-3 px-2 focus:border-neutral-950 transition-colors" value="2024-10-18">
+<input type="date" id="checkOut" class="font-body-lg text-lg text-neutral-900 bg-transparent border-b-2 border-neutral-300 outline-none py-3 px-2 focus:border-neutral-950 transition-colors">
 </div>
 <!-- Guests -->
 <div class="flex flex-col">
@@ -297,6 +297,35 @@
 </div>
 <script>
 const API_URL = '/api/reserve';
+
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function initializeDates() {
+  const today = new Date();
+  const nextWeek = new Date(today);
+  nextWeek.setDate(nextWeek.getDate() + 7);
+
+  document.getElementById('checkIn').value = formatDate(today);
+  document.getElementById('checkOut').value = formatDate(nextWeek);
+}
+
+function updateCheckOutDate() {
+  const checkInValue = document.getElementById('checkIn').value;
+  if (checkInValue) {
+    const checkInDate = new Date(checkInValue + 'T00:00:00');
+    const checkOutDate = new Date(checkInDate);
+    checkOutDate.setDate(checkOutDate.getDate() + 7);
+    document.getElementById('checkOut').value = formatDate(checkOutDate);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initializeDates);
+document.getElementById('checkIn').addEventListener('change', updateCheckOutDate);
 
 document.getElementById('reserveBtn').addEventListener('click', async () => {
   const userName = document.getElementById('userName').value;
