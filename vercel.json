@@ -20,5 +20,8 @@
       "src": "/(.*)",
       "dest": "index.html"
     }
+  ],
+  "alias": [
+    "googlesheet-gamma.vercel.app"
   ]
 }
