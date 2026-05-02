@@ -11,7 +11,11 @@ async function initializeSheets() {
     let credentials;
 
     // 방법 1: 파일에서 읽기 (로컬 + Vercel)
-    const credPath = path.join(process.cwd(), 'service-account-key.json');
+    let credPath = path.join(process.cwd(), 'service-account-key.json');
+    // Vercel 환경에서는 __dirname 기반 경로 사용
+    if (!fs.existsSync(credPath)) {
+      credPath = path.join(__dirname, '..', 'service-account-key.json');
+    }
     if (fs.existsSync(credPath)) {
       const credFile = fs.readFileSync(credPath, 'utf-8');
       credentials = JSON.parse(credFile);
