@@ -87,7 +87,20 @@ module.exports = async (req, res) => {
 
     res.status(200).json({ success: true, message: '예약 정보가 저장되었습니다' });
   } catch (error) {
-    console.error('시트 저장 오류:', error.message);
-    res.status(500).json({ error: '데이터 저장 실패' });
+    console.error('시트 저장 오류:', error);
+    console.error('에러 상세:', {
+      message: error.message,
+      code: error.code,
+      status: error.status,
+      env: {
+        SHEET_ID: !!SHEET_ID,
+        GOOGLE_CREDENTIALS: !!process.env.GOOGLE_CREDENTIALS,
+        GOOGLE_CREDENTIALS_BASE64: !!process.env.GOOGLE_CREDENTIALS_BASE64,
+      }
+    });
+    res.status(500).json({
+      error: '데이터 저장 실패',
+      details: error.message
+    });
   }
 };
