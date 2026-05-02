@@ -36,11 +36,16 @@ async function initializeSheets() {
 
       if (process.env.GOOGLE_CREDENTIALS) {
         console.log('[DEBUG] GOOGLE_CREDENTIALS 사용 중...');
+        console.log('[DEBUG] GOOGLE_CREDENTIALS 길이:', process.env.GOOGLE_CREDENTIALS.length);
         try {
           credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
           console.log('[DEBUG] GOOGLE_CREDENTIALS JSON 파싱 성공');
+          console.log('[DEBUG] client_email:', credentials.client_email);
+          console.log('[DEBUG] private_key 길이:', credentials.private_key ? credentials.private_key.length : 'null');
+          console.log('[DEBUG] private_key 시작:', credentials.private_key ? credentials.private_key.substring(0, 30) : 'null');
         } catch (err) {
           console.log('[DEBUG] GOOGLE_CREDENTIALS JSON 파싱 실패:', err.message);
+          console.log('[DEBUG] 처음 100 글자:', process.env.GOOGLE_CREDENTIALS.substring(0, 100));
           throw new Error('GOOGLE_CREDENTIALS JSON 파싱 실패: ' + err.message);
         }
       } else if (process.env.GOOGLE_CREDENTIALS_BASE64) {
