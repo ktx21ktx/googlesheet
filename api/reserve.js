@@ -27,17 +27,28 @@ async function initializeSheets() {
     else {
       let credentials;
 
+      console.log('[DEBUG] 환경 변수 확인:');
+      console.log('[DEBUG] GOOGLE_CREDENTIALS:', process.env.GOOGLE_CREDENTIALS ? '설정됨' : '없음');
+      console.log('[DEBUG] GOOGLE_CREDENTIALS_BASE64:', process.env.GOOGLE_CREDENTIALS_BASE64 ? `설정됨 (${process.env.GOOGLE_CREDENTIALS_BASE64.length} chars)` : '없음');
+
       if (process.env.GOOGLE_CREDENTIALS) {
+        console.log('[DEBUG] GOOGLE_CREDENTIALS 사용 중...');
         try {
           credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+          console.log('[DEBUG] GOOGLE_CREDENTIALS JSON 파싱 성공');
         } catch (err) {
+          console.log('[DEBUG] GOOGLE_CREDENTIALS JSON 파싱 실패:', err.message);
           throw new Error('GOOGLE_CREDENTIALS JSON 파싱 실패: ' + err.message);
         }
       } else if (process.env.GOOGLE_CREDENTIALS_BASE64) {
+        console.log('[DEBUG] GOOGLE_CREDENTIALS_BASE64 사용 중...');
         try {
           const decoded = Buffer.from(process.env.GOOGLE_CREDENTIALS_BASE64, 'base64').toString('utf-8');
+          console.log('[DEBUG] Base64 디코딩 성공 (길이:', decoded.length, ')');
           credentials = JSON.parse(decoded);
+          console.log('[DEBUG] JSON 파싱 성공, client_email:', credentials.client_email);
         } catch (err) {
+          console.log('[DEBUG] Base64/JSON 처리 실패:', err.message);
           throw new Error('GOOGLE_CREDENTIALS_BASE64 디코딩 실패: ' + err.message);
         }
       } else {
