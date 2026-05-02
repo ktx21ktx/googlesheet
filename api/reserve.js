@@ -74,6 +74,10 @@ module.exports = async (req, res) => {
   try {
     const { userName, checkIn, checkOut, guests } = req.body;
 
+    console.log('[DEBUG] SHEET_ID value:', SHEET_ID);
+    console.log('[DEBUG] SHEET_ID length:', SHEET_ID ? SHEET_ID.length : 'null');
+    console.log('[DEBUG] SHEET_ID charCodes:', SHEET_ID ? SHEET_ID.split('').map(c => c.charCodeAt(0)).join(',') : 'null');
+
     if (!SHEET_ID) {
       return res.status(400).json({ error: '시트 ID가 설정되지 않았습니다' });
     }
@@ -104,6 +108,12 @@ module.exports = async (req, res) => {
     res.status(200).json({ success: true, message: '예약 정보가 저장되었습니다' });
   } catch (error) {
     console.error('시트 저장 오류:', error);
+    console.error('[DEBUG] Error details:', {
+      message: error.message,
+      code: error.code,
+      statusCode: error.status,
+      details: error.details
+    });
     res.status(500).json({
       error: '데이터 저장 실패',
       details: error.message
