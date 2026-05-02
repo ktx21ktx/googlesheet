@@ -10,8 +10,11 @@ async function initializeSheets() {
   if (!sheets) {
     // 파일 경로 탐색 (로컬 + Vercel)
     let credPath = path.join(process.cwd(), 'service-account-key.json');
+    console.log('[DEBUG] Checking path 1:', credPath, '- exists:', fs.existsSync(credPath));
+
     if (!fs.existsSync(credPath)) {
       credPath = path.join(__dirname, '..', 'service-account-key.json');
+      console.log('[DEBUG] Checking path 2:', credPath, '- exists:', fs.existsSync(credPath));
     }
 
     let auth;
