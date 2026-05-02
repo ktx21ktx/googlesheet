@@ -1,7 +1,5 @@
 {
   "version": 2,
-  "projectId": "prj_eyHPDPH1t586T7pWpg9uezgeuBTE",
-  "orgId": "team_bhhan7s-projects",
   "builds": [
     {
       "src": "api/reserve.js",
