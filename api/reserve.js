@@ -1,6 +1,7 @@
 const config = require('../lib/config');
 const { initializeSheets, appendReservation } = require('../lib/sheetService');
 const { getUserMessage } = require('../lib/errors');
+const { getKoreanTime } = require('../lib/utils');
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -28,7 +29,7 @@ module.exports = async (req, res) => {
 
     const sheetsAPI = await initializeSheets();
 
-    const timestamp = new Date().toISOString();
+    const timestamp = getKoreanTime();
     const data = { timestamp, userName, checkIn, checkOut, guests };
 
     await appendReservation(sheetsAPI, config.SHEET_ID, data);

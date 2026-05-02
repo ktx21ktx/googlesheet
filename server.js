@@ -3,6 +3,7 @@ const cors = require('cors');
 const config = require('./lib/config');
 const { initializeSheets, appendReservation } = require('./lib/sheetService');
 const { getUserMessage } = require('./lib/errors');
+const { getKoreanTime } = require('./lib/utils');
 
 const app = express();
 app.use(cors());
@@ -21,7 +22,7 @@ app.post('/api/reserve', async (req, res) => {
 
     const sheetsAPI = await initializeSheets();
 
-    const timestamp = new Date().toISOString();
+    const timestamp = getKoreanTime();
     const data = { timestamp, userName, checkIn, checkOut, guests };
 
     await appendReservation(sheetsAPI, config.SHEET_ID, data);

@@ -355,8 +355,7 @@ document.getElementById('reserveBtn').addEventListener('click', async () => {
     if (response.ok) {
       showNotification('✓ 예약 요청이 접수되었습니다', true);
       document.getElementById('userName').value = '';
-      document.getElementById('checkIn').value = '';
-      document.getElementById('checkOut').value = '';
+      initializeDates();
       setTimeout(() => {
         btn.disabled = false;
         btn.textContent = '예약 가능 여부 확인';
