@@ -8,45 +8,48 @@ let sheets = null;
 
 async function initializeSheets() {
   if (!sheets) {
-    let credentials;
-
-    // 방법 1: 파일에서 읽기 (로컬 + Vercel)
+    // 파일 경로 탐색 (로컬 + Vercel)
     let credPath = path.join(process.cwd(), 'service-account-key.json');
-    // Vercel 환경에서는 __dirname 기반 경로 사용
     if (!fs.existsSync(credPath)) {
       credPath = path.join(__dirname, '..', 'service-account-key.json');
     }
+
+    let auth;
+
+    // 파일이 존재하면 keyFile로 인증
     if (fs.existsSync(credPath)) {
-      const credFile = fs.readFileSync(credPath, 'utf-8');
-      credentials = JSON.parse(credFile);
+      auth = new google.auth.GoogleAuth({
+        keyFile: credPath,
+        scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+      });
     }
-    // 방법 2: 환경 변수에서 Base64 디코딩 (Vercel - 우선)
-    else if (process.env.GOOGLE_CREDENTIALS_BASE64) {
-      try {
-        const decoded = Buffer.from(process.env.GOOGLE_CREDENTIALS_BASE64, 'base64').toString('utf-8');
-        credentials = JSON.parse(decoded);
-      } catch (decodeError) {
-        console.error('Base64 디코딩 실패:', decodeError.message);
-        throw new Error('Base64 디코딩 실패: ' + decodeError.message);
-      }
-    }
-    // 방법 3: 환경 변수에서 JSON 직접 읽기 (Vercel)
-    else if (process.env.GOOGLE_CREDENTIALS) {
-      try {
-        credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
-      } catch (parseError) {
-        console.error('JSON 파싱 실패:', parseError.message);
-        throw new Error('JSON 파싱 실패: ' + parseError.message);
-      }
-    }
+    // 파일 없으면 환경 변수 사용
     else {
-      throw new Error('서비스 계정 인증 정보를 찾을 수 없습니다. GOOGLE_CREDENTIALS 환경 변수를 설정하세요.');
+      let credentials;
+
+      if (process.env.GOOGLE_CREDENTIALS) {
+        try {
+          credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+        } catch (err) {
+          throw new Error('GOOGLE_CREDENTIALS JSON 파싱 실패: ' + err.message);
+        }
+      } else if (process.env.GOOGLE_CREDENTIALS_BASE64) {
+        try {
+          const decoded = Buffer.from(process.env.GOOGLE_CREDENTIALS_BASE64, 'base64').toString('utf-8');
+          credentials = JSON.parse(decoded);
+        } catch (err) {
+          throw new Error('GOOGLE_CREDENTIALS_BASE64 디코딩 실패: ' + err.message);
+        }
+      } else {
+        throw new Error('Google 인증 정보 없음. service-account-key.json 또는 환경 변수 필요');
+      }
+
+      auth = new google.auth.GoogleAuth({
+        credentials: credentials,
+        scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+      });
     }
 
-    const auth = new google.auth.GoogleAuth({
-      keyFile: credPath,  // server.js와 동일하게 keyFile 옵션 사용
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    });
     sheets = google.sheets({ version: 'v4', auth });
   }
   return sheets;
@@ -101,16 +104,6 @@ module.exports = async (req, res) => {
     res.status(200).json({ success: true, message: '예약 정보가 저장되었습니다' });
   } catch (error) {
     console.error('시트 저장 오류:', error);
-    console.error('에러 상세:', {
-      message: error.message,
-      code: error.code,
-      status: error.status,
-      env: {
-        SHEET_ID: !!SHEET_ID,
-        GOOGLE_CREDENTIALS: !!process.env.GOOGLE_CREDENTIALS,
-        GOOGLE_CREDENTIALS_BASE64: !!process.env.GOOGLE_CREDENTIALS_BASE64,
-      }
-    });
     res.status(500).json({
       error: '데이터 저장 실패',
       details: error.message
